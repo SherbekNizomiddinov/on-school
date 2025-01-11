@@ -7,7 +7,7 @@ def show_menu(
     ) -> None:
 
     print(
-        "=== Welcome to On-School ===" if len(menu) == 3 else f"\n--- Main Menu for {user['name']} ---",
+        "=== Welcome to Online-School ===" if len(menu) == 3 else f"\n--- Main Menu for {user['name']} ---",
         end="\n\n"
     )
     

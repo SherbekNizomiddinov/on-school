@@ -1,68 +1,82 @@
-from pprint import pprint
+import pprint
 
-def register_student(students_data: dict[str, dict[str, str]]) -> None:
-    """
-    Registers a new student by collecting their name, email, and password, 
-    and stores the information in the students_data dictionary.
+def register_student(student: dict[str, dict[str, str]], student_date: list) -> None:
 
-    Args:
-        students_data (dict): A dictionary where student emails are keys 
-                               and their details (name and password) are stored as values.
-    """
-    name = input("Enter your name: ")
-    email = input("Enter your email: ")
-    password = input("Enter your password: ")
+    #student nomli dictionary ga "name" nomli key va unga foydalanuvchi kiritgan name ni kiritdik
+    student_name = input("Enter your name: ")
 
-    user = {
-        "name": name,
-        "email": email,
-        "password": password,
-    }
-    # TODO: 1. validate name, email 2. shifrlash password
+    # gmail va password ni alohida o`zgaruvchilarga olib oldik
+    student_email = input("Enter your email: ")
+    student_password = input("Enter your password: ")
     
-    n = len(students_data)
-    students_data[100000 + n + 1] = user
+    
+    # student nomli dictionary ga pas_log nomli nestted dictionary yaratib oldik passwod va loginni saqlash uchun
+    while True:
+        count_log = student_email.count('@')
+        check_log = student_email.find('@')
+        length_pass = len(student_password)
+        
+        if count_log != 1 or check_log == 0 or check_log == len(student_email) - 1:
+            print("gmail kiritishda hatolik bor iltimos tekshirib qaytadan kiriting \n'@' bilgisi qo`yilmagan yoki 2 va undan ortiq qo`yilgan bo`lishi mn\nyoki gmailning boshiga yoki oxiriga bu bilgini qo`ygan bo`lishi mn") 
+            student_email = input("Enter your email: ")
+            
+        elif length_pass < 8:
+            print("Password 8 ta bilgidan uzun bo`lishi kk")
+            student_password = input("Enter your password: ")
+            
+        else:
+            check_log_count = 0
+            for user in range(len(student_date)):
+                if student_date[user]['pas_log']['log'] == student_email:
+                    print("bunday gmailda foydalanuvchi ruyxatdan o`tgan, iltimos boshqa gmaildan foydalanib ko`ring")
+                    student_email = input("Enter your email: ")
+                    check_log_count +=1
+                    break
+            if check_log_count:
+                pass
+            else:
+                break
+    student = {
+            'name': student_name, 
+            'course': [], 
+            'pas_log': {'log': student_email, 
+                        'pass': student_password
+                        }}
+    # pprint.pprint(student)
+    return student
 
-    print(f"Registration successful! Welcome, {name}.")
+# paroli va logini bo`yicha bazada borligini aniqlovchi function
+def login_student(students_data: list) -> str | None:
+   
+    # gmail va password ni kiriting 
+    login = input("Enter your email: ")
+    passwod = input("Enter your password: ")
 
-    return students_data
+    student_dict = {}
+    student_dict['log'] = login
+    student_dict['pass'] = passwod
+    
+    # bazada kiritilgan login va password ruyxatdan o`tgan yoki o`tmaganini tikshiramiz
+    for user in students_data:
+        if(user['pas_log']) == student_dict:
+            print("Login successful! Welcome back, {}.".format(user['name']))
+            return user
+    return None
 
-def login_student(students_data: dict[str, dict[str, str]]) -> int:
-    """
-    Allows a student to log in by entering their email and password. 
-    If the login is successful, it returns the student's name.
-
-    Args:
-        students_data (dict): A dictionary where student emails are keys 
-                               and their details (name and password) are stored as values.
-
-    Returns:
-        str: The student's name if login is successful, else None.
-    """
-    email = input("Enter your email: ")
-    password = input("Enter your password: ")
-
-    for user_id in students_data:
-        if students_data[user_id]['email'] == email and students_data[user_id]['password'] == password:
-            print(f"Login successful! Welcome back, {students_data[user_id]['name']}.")
-            return user_id
-
-    print("User doesn't exist.")
-    return -1
-
+# kursga yozilish uchun function
 def enroll_in_course(
     courses_data: list[dict[str, str]], 
     students_data: dict[str, dict[str, list[str]]], 
     student_email: str
 ) -> None:
-    """
-    Allows a student to enroll in a course by selecting from the available courses. 
-    The selected course is added to the student's list of enrolled courses.
+ 
+    # kursni tanlash uchun nommir tanlash
+    courses_number = int(input("Select a course number to enroll: "))
 
-    Args:
-        courses_data (list): A list of dictionaries containing available course details.
-        students_data (dict): A dictionary where student emails are keys 
-                               and their details (including enrolled courses) are stored as values.
-        student_email (str): The email of the student who is enrolling.
-    """
-    pass
+    if courses_number - 1 > len(courses_data) or courses_number - 1 < 0:
+        print("\nSiz tanlagan nommirda kurs yo`q iltimos tikshirib qaytadan tanlang!\n")
+        return None
+    else:
+        print("Successfully enrolled in {}!\n".format(courses_data[courses_number - 1]["course_name"]))
+        return courses_data[courses_number - 1]
+   
