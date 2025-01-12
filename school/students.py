@@ -3,11 +3,11 @@ import pprint
 def register_student(student: dict[str, dict[str, str]], student_date: list) -> None:
 
     #student nomli dictionary ga "name" nomli key va unga foydalanuvchi kiritgan name ni kiritdik
-    student_name = input("Enter your name: ")
+    student_name = input("Ismingizni kiriting: ")
 
     # gmail va password ni alohida o`zgaruvchilarga olib oldik
-    student_email = input("Enter your email: ")
-    student_password = input("Enter your password: ")
+    student_email = input("Emailingizni kiriting: ")
+    student_password = input("Parolingizni kiriting: ")
     
     
     # student nomli dictionary ga pas_log nomli nestted dictionary yaratib oldik passwod va loginni saqlash uchun
@@ -17,19 +17,19 @@ def register_student(student: dict[str, dict[str, str]], student_date: list) -> 
         length_pass = len(student_password)
         
         if count_log != 1 or check_log == 0 or check_log == len(student_email) - 1:
-            print("gmail kiritishda hatolik bor iltimos tekshirib qaytadan kiriting \n'@' bilgisi qo`yilmagan yoki 2 va undan ortiq qo`yilgan bo`lishi mn\nyoki gmailning boshiga yoki oxiriga bu bilgini qo`ygan bo`lishi mn") 
+            print("Gmailni kiritishda hatolik bor iltimos qaytadan urinib ko'ring \n'@' belgisi qo'yilmagan \nyoki boshida va ohirida qo'yilgan bo'lishi mumkin") 
             student_email = input("Enter your email: ")
             
         elif length_pass < 8:
-            print("Password 8 ta bilgidan uzun bo`lishi kk")
-            student_password = input("Enter your password: ")
+            print("Password 8 ta belgidan uzun bo`lishi kerak")
+            student_password = input("Parolingizni kiriting: ")
             
         else:
             check_log_count = 0
             for user in range(len(student_date)):
                 if student_date[user]['pas_log']['log'] == student_email:
-                    print("bunday gmailda foydalanuvchi ruyxatdan o`tgan, iltimos boshqa gmaildan foydalanib ko`ring")
-                    student_email = input("Enter your email: ")
+                    print("Bunday gmail mavjud boshqacha nom bering")
+                    student_email = input("Emailingizni kiriting: ")
                     check_log_count +=1
                     break
             if check_log_count:
@@ -49,8 +49,8 @@ def register_student(student: dict[str, dict[str, str]], student_date: list) -> 
 def login_student(students_data: list) -> str | None:
    
     # gmail va password ni kiriting 
-    login = input("Enter your email: ")
-    passwod = input("Enter your password: ")
+    login = input("Emailingizni kiriting: ")
+    passwod = input("Parolingizni kiriting: ")
 
     student_dict = {}
     student_dict['log'] = login
@@ -59,7 +59,7 @@ def login_student(students_data: list) -> str | None:
     # bazada kiritilgan login va password ruyxatdan o`tgan yoki o`tmaganini tikshiramiz
     for user in students_data:
         if(user['pas_log']) == student_dict:
-            print("Login successful! Welcome back, {}.".format(user['name']))
+            print("Ro'yxatdan muvaffaqiyatli o'tildi, Xush kelibsiz {}.".format(user['name']))
             return user
     return None
 
@@ -71,12 +71,12 @@ def enroll_in_course(
 ) -> None:
  
     # kursni tanlash uchun nommir tanlash
-    courses_number = int(input("Select a course number to enroll: "))
+    courses_number = int(input("Kurs raqamini kiriting: "))
 
     if courses_number - 1 > len(courses_data) or courses_number - 1 < 0:
         print("\nSiz tanlagan nommirda kurs yo`q iltimos tikshirib qaytadan tanlang!\n")
         return None
     else:
-        print("Successfully enrolled in {}!\n".format(courses_data[courses_number - 1]["course_name"]))
+        print("Muvaffaqiyatli ro'yhatdan o'tildi {}!\n".format(courses_data[courses_number - 1]["course_name"]))
         return courses_data[courses_number - 1]
    
